@@ -3,29 +3,28 @@
 
 import TweetBox from './components/TweetBox';
 import TweetsList from './components/TweetsList';
+import TweetStore from './stores/TweetStore';
 
-let mockTweets = [
-  { id: 1, name: 'Samer Buna', body: 'My Tweet'},
-  { id: 2, name: 'Samer Buna', body: 'My 1st Tweet'},
-  { id: 3, name: 'Samer Buna', body: 'My 2nd Tweet'}
-];
+import TweetActions from "./actions/TweetActions";
+TweetActions.getAllTweets();
+
+// let mockTweets = [
+//   { id: 1, name: 'Samer Buna', body: 'My Tweet'},
+//   { id: 2, name: 'Samer Buna', body: 'My 1st Tweet'},
+//   { id: 3, name: 'Samer Buna', body: 'My 2nd Tweet'}
+// ];
+
+let getAppState = () => {
+  return { tweetsList: TweetStore.getAll() };
+
+}
 
 class Main extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { tweetsList: mockTweets };
-  }
-
-  formattedTweets(tweetsList) {
-
-    let formattedList = tweetsList.map(tweet => {
-      tweet.formattedDate = moment(tweet.created_at).fromNow();
-      return tweet;
-    });
-    return {
-      tweetsList: tweetsList
-    };
+    this.state = getAppState();
+    this._onChange = this._onChange.bind(this);
   }
 
   addTweet(tweetToAdd) {
@@ -43,18 +42,29 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    $.ajax("/tweets")
-    .success(data => {
-      console.log(data);
-      this.setState(this.formattedTweets(data));
-    })
-    .error(err => console.log(err));
+    // $.ajax("/tweets")
+    // .success(data => {
+    //   console.log(data);
+    //   this.setState(this.formattedTweets(data));
+    // })
+    // .error(err => console.log(err));
+
+    TweetStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    TweetStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+    console.log(5, "Main._onChange");
+    this.setState(getAppState());
   }
 
   render() {
     return (
       <div className="container">
-        <TweetBox sendTweet={this.addTweet.bind(this)} />
+        <TweetBox />
         <TweetsList tweets={this.state.tweetsList} />
       </div>
     );
