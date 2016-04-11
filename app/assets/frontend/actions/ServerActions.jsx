@@ -17,5 +17,20 @@ export default {
       actionType: ActionTypes.RECEIVED_ONE_TWEET,
       rawTweet
     })
-  }
+  },
+  receivedUsers(rawUsers) {
+
+    // AppDispatcher...
+    AppDispatcher.dispatch({
+      actionType: ActionTypes.RECEIVED_USERS,
+      rawUsers
+    });
+
+  },
+  receivedOneFollower(rawFollower) {
+    AppDispatcher.dispatch({
+      actionType: ActionTypes.RECEIVED_ONE_FOLLOWER,
+      rawFollower
+    })
+  },
 }

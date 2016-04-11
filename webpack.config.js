@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
     entry: "./app/assets/frontend/main.jsx",
     output: {

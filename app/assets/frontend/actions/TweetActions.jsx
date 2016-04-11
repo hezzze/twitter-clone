@@ -11,8 +11,4 @@ export default {
     API.createTweet(body);
   }
 
-
-
-
-
 }
